@@ -5,15 +5,13 @@
 TEMPLATE = app
 TARGET = QtConsoleApplication1
 DESTDIR = ../Win32/Debug
-QT += core
+QT += core gui widgets
 
 INCLUDEPATH += $$PWD/include
 LIBS += -L"$$PWD/lib/msc" -lvisa32
 LIBS += -L"$$PWD/lib/msc" -livi
 CONFIG += C++11
 
-CONFIG += debug console
-DEFINES += WIN64 QT_DLL
 INCLUDEPATH += . \
     ./GeneratedFiles/Debug
 DEPENDPATH += .
@@ -25,11 +23,105 @@ RCC_DIR += ./GeneratedFiles
 HEADERS += ResourceManager.h \
     ModuleMapping.h \
     ResourceMapping.h \
-    VisaDev.h
+    VisaDev.h \
+    ResourceView.h
+
 SOURCES += main.cpp \
     ResourceManager.cpp \
     ModuleMapping.cpp \
     ResourceMapping.cpp \
-    VisaDev.cpp
+    VisaDev.cpp \
+    ResourceView.cpp
+
+DISTFILES += \
+    lib/bc/ivi.lib \
+    lib/bc/niHSDIO.lib \
+    lib/bc/niswitch.lib \
+    lib/bc/visa32.lib \
+    lib/msc/ivi.lib \
+    lib/msc/niArbCal.lib \
+    lib/msc/nidcpower.lib \
+    lib/msc/nidmm.lib \
+    lib/msc/nidmm_32.lib \
+    lib/msc/niFgen.lib \
+    lib/msc/niHSDIO.lib \
+    lib/msc/niModInst.lib \
+    lib/msc/niScope.lib \
+    lib/msc/niswitch.lib \
+    lib/msc/niTClk.lib \
+    lib/msc/visa32.lib \
+    lib/msc/visa32.dll \
+    include/visa32.bas \
+    include/vpptype.bas \
+    include/cvi2009compat.h \
+    include/dModt.h \
+    include/dModt_ChannelCoding.h \
+    include/dModt_DeInterleaving.h \
+    include/dModt_Demodulation.h \
+    include/dModt_Deprecated.h \
+    include/dModt_Equalization.h \
+    include/dModt_Impairments.h \
+    include/dModt_Interleaving.h \
+    include/dModt_Modulation.h \
+    include/dModt_Utility.h \
+    include/ivi.h \
+    include/IviACPwr_ni.h \
+    include/IviCounter_ni.h \
+    include/IviDCPwr.h \
+    include/IviDCPwrObsolete.h \
+    include/IviDigitizer_ni.h \
+    include/IviDmm.h \
+    include/IviDmmObsolete.h \
+    include/IviDownconverter_ni.h \
+    include/IviFgen.h \
+    include/IviFgenObsolete.h \
+    include/IviPwrMeter.h \
+    include/IviRFSigGen.h \
+    include/IviScope.h \
+    include/IviScopeObsolete.h \
+    include/IviSpecAn.h \
+    include/IviSwtch.h \
+    include/IviSwtchObsolete.h \
+    include/IviUpconverter_ni.h \
+    include/Modt.h \
+    include/Modt_Deprecated.h \
+    include/niArbCal.h \
+    include/nidaqmx.h \
+    include/nidcpower.h \
+    include/nidmm.h \
+    include/nidmmObsolete.h \
+    include/niFgen.h \
+    include/niFgenObsolete.h \
+    include/niHSDIO.h \
+    include/niHSDIOObsolete.h \
+    include/niModInst.h \
+    include/niScope.h \
+    include/niScopeCal.h \
+    include/niScopeObsolete.h \
+    include/nise.h \
+    include/niseCfg.h \
+    include/niSMT_Deprecated_Defines.h \
+    include/niswitch.h \
+    include/niswitchTopologies.h \
+    include/nisyscfg.h \
+    include/nisyscfg_errors.h \
+    include/nisyscfg_wide.h \
+    include/niSysMon.h \
+    include/niTClk.h \
+    include/PID.h \
+    include/smt.h \
+    include/spt.h \
+    include/sptjtfa.h \
+    include/sptsrse.h \
+    include/sptwfbd.h \
+    include/visa.h \
+    include/visatype.h \
+    include/vpptype.h \
+    QtConsoleApplication1.vcxproj \
+    QtConsoleApplication1.vcxproj.filters \
+    README.md
+
+FORMS += \
+    ResourceView.ui
 
 

@@ -1,10 +1,9 @@
-#include <QtCore/QCoreApplication>
-#include <ResourceManager.h>
+#include <QApplication>
 #include <QDebug>
 #include <QTime>
+#include <ResourceView.h>
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
 #if 0
 
     ViStatus  status = 0;
@@ -44,13 +43,17 @@ int main(int argc, char *argv[])
     viClose(instr);
     viClose(defaultRM);
 #endif
-
+    QApplication a(argc, argv);
+    ResourceView rv;
+    rv.show();
+#if 0
     ResourceManager rm;
     qDebug() << QTime::currentTime().toString();
 
-    qDebug() << "_SIZE_" << rm.getResourcesList().size() << "_string_" << rm.getResourcesList();
+    qDebug() << "_SIZE_" << rm.getResourcesList().size() << "_string_" <<rm.getResourcesList();
     qDebug() << QTime::currentTime().toString();
 
     qDebug() << "INF_TYPE " << rm.getResourcesByType(1);
+#endif
     return a.exec();
 }
