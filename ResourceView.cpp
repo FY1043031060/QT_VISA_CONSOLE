@@ -32,7 +32,9 @@ int ResourceView::initComponent()
 {
     int status = 0;
     QTreeWidgetItem* topItem = new QTreeWidgetItem(m_resourceWidget);
+    topItem->setText(0,"DEV");
     m_resourceWidget->addTopLevelItem(topItem);
+    m_resourceWidget->setHeaderHidden(true);
     return status;
 }
 
