@@ -10,6 +10,7 @@ QT += core
 INCLUDEPATH += $$PWD/include
 LIBS += -L"$$PWD/lib/msc" -lvisa32
 LIBS += -L"$$PWD/lib/msc" -livi
+CONFIG += C++11
 
 CONFIG += debug console
 DEFINES += WIN64 QT_DLL
