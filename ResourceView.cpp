@@ -13,6 +13,7 @@ ResourceView::ResourceView(QWidget *parent) :
     QHBoxLayout* hlayout = new QHBoxLayout(this);
     hlayout->addWidget(m_resourceWidget);
     QPushButton* pushButton = new QPushButton(this);
+    pushButton->setText(QStringLiteral("DevList"));
     hlayout->addWidget(pushButton);
     QObject::connect(pushButton,&QPushButton::clicked,this,[&](){
         this->m_resourceWidget->clear();
