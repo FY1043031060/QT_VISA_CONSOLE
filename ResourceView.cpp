@@ -31,14 +31,17 @@ ResourceView::ResourceView(QWidget *parent) :
         }
     });
 
-//    QObject::connect(buttonByType,&QPushButton::clicked,this,[&](){
-//        this->m_resourceWidget->clear();
-//        for(VisaDev::VISA_DEVICE_TYPE index = 0;index<VisaDev::VISA_DEVICE_MAX;index++){
-//            foreach (QString var, this->m_RM->getResourcesByType(index)) {
-//                this->addResourceViewItem(var);
-//            }
+    QObject::connect(buttonByType,&QPushButton::clicked,this,[&](){
+        this->m_resourceWidget->clear();
+        QMap<QString,ResourceManager::RESOURCE_TYPE>::iterator iter =
+                QMap<QString,ResourceManager::RESOURCE_TYPE>::begin();
+        for(iter;iter!=QMap<QString,ResourceManager::RESOURCE_TYPE>::end();iter++)
+        {
+            //TODO::Ê÷ÐÎ½Úµã
+            //*iter.key()
+        }
 
-//        }});
+    });
 }
 
 ResourceView::~ResourceView()
@@ -60,4 +63,9 @@ void ResourceView::addResourceViewItem(QString strItem)
     item->setText(0,strItem);
     item->setCheckState(0,Qt::Checked);
     //m_resourceWidget->topLevelItem(0)->addChild(item);
+}
+
+void ResourceView::addDevByCategory(QString strItem)
+{
+
 }

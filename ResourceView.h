@@ -19,6 +19,7 @@ public:
     int initComponent();
 public slots:
     void addResourceViewItem(QString strItem);
+    void addResourceViewByCategy(QString strItem);
 private:
     Ui::ResourceView *ui;
     QTreeWidget* m_resourceWidget;

@@ -37,15 +37,18 @@ int ResourceManager::scanForResources()
                         &m_numResources,
                         strDesc);
     status = viParseRsrcEx(m_DefaultRM,
-                  strDesc,
-                  &intfType,
-                  &intfNum,
-                  rsrcClass,
-                  expandedUnaliasedName,
-                  aliasIfExists);
+                           strDesc,
+                           &intfType,
+                           &intfNum,
+                           rsrcClass,
+                           expandedUnaliasedName,
+                           aliasIfExists);
 
     //m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
-    m_listRM.push_back(createWidget(strDesc,aliasIfExists));
+    RESOURCE_TYPE enType = parResourceName(strDesc);
+
+    m_mapRM.insert(showResourceDev(enType),createWidget(enType,aliasIfExists));
+
     for(int index = 0; index < m_numResources - 1; index++)
     {
         status = viFindNext(session, strDesc);
@@ -58,7 +61,8 @@ int ResourceManager::scanForResources()
                       rsrcClass,
                       expandedUnaliasedName,
                       aliasIfExists);
-        m_listRM.push_back(createWidget(strDesc,aliasIfExists));
+        //m_listRM.push_back(createWidget(strDesc,aliasIfExists));
+        m_mapRM.insert(showResourceDev(enType),createWidget(enType,aliasIfExists));
     }
 
     return status;
@@ -93,9 +97,14 @@ QStringList ResourceManager ::getResourcesByType(unsigned int uiType)
     return temp;
 }
 
-QWidget *ResourceManager::createWidget(QString strDev,QString strAlias)
+QMap<QString, QWidget *> ResourceManager::getResourceDev()
 {
-    switch(parResourceName(strAlias))
+    return m_mapRM;
+}
+
+QWidget *ResourceManager::createWidget(RESOURCE_TYPE enDev,QString strAlias)
+{
+    switch(enDev)
     {
     case ASL485_422_TYPE:
         return new ASL485AND422(strDev,m_DefaultRM,this);
@@ -116,4 +125,16 @@ ResourceManager::RESOURCE_TYPE ResourceManager::parResourceName(QString strResou
     {
         return ASL485_422_TYPE;
     }
+}
+
+QString ResourceManager::showResourceDev(ResourceManager::RESOURCE_TYPE enType)
+{
+    QString tmp;
+    switch(enType)
+    {
+    case ASL485_422_TYPE:
+        tmp+=QStringLiteral("Òì²½´®¿Ú");
+        break;
+    }
+    tmp+=(++numWidget[enType]);
 }

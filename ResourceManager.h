@@ -14,11 +14,12 @@
 class ResourceManager : public QWidget
 {
     Q_OBJECT
-    enum RESOURCE_TYPE{
-        ASL485_422_TYPE,
+public: enum RESOURCE_TYPE{
+        ASL485_422_TYPE = 0,
         ETHERNET_TYPE,
         AIR1553_TYPE,
-        CAN_TYPE
+        CAN_TYPE,
+        RESOURCE_MAX
     };
 public:
     explicit ResourceManager(QWidget *parent = Q_NULLPTR);
@@ -26,12 +27,16 @@ public:
     int scanForResources();
     QStringList getResourcesList();
     QStringList getResourcesByType(unsigned int uiType);
-    QWidget* createWidget(QString strDev,QString strAlias);
+    QMap<QString,QWidget*> getResourceDev();
+    QWidget* createWidget(RESOURCE_TYPE enDev,QString strAlias);
     RESOURCE_TYPE parResourceName(QString strResource);
+    QString showResourceDev(RESOURCE_TYPE enType);
 private:
     QStringList m_listResources;
     QList<QWidget* > m_listRM;
+    QMap<QString,QWidget*> m_mapRM;
     ViSession   m_DefaultRM;
+    int numWidget[RESOURCE_MAX];
     unsigned long m_numResources;
     const QString m_hostName = "visa://NT-G6000/?*";
 };
