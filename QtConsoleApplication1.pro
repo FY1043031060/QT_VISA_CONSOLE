@@ -24,14 +24,16 @@ HEADERS += ResourceManager.h \
     ModuleMapping.h \
     ResourceMapping.h \
     VisaDev.h \
-    ResourceView.h
+    ResourceView.h \
+    ASL485AND422.h
 
 SOURCES += main.cpp \
     ResourceManager.cpp \
     ModuleMapping.cpp \
     ResourceMapping.cpp \
     VisaDev.cpp \
-    ResourceView.cpp
+    ResourceView.cpp \
+    ASL485AND422.cpp
 
 DISTFILES += \
     lib/bc/ivi.lib \

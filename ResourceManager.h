@@ -1,7 +1,7 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <QObject>
+#include <QWidget>
 #include "visa.h"
 #include "ivi.h"
 #include <QMap>
@@ -11,20 +11,26 @@
 #pragma comment(lib,"visa32.lib")
 #pragma comment(lib,"ivi.lib")
 
-class ResourceManager : public QObject
+class ResourceManager : public QWidget
 {
     Q_OBJECT
-
+    enum RESOURCE_TYPE{
+        ASL485_422_TYPE,
+        ETHERNET_TYPE,
+        AIR1553_TYPE,
+        CAN_TYPE
+    };
 public:
-    explicit ResourceManager(QObject *parent = Q_NULLPTR);
+    explicit ResourceManager(QWidget *parent = Q_NULLPTR);
     ~ResourceManager();
     int scanForResources();
     QStringList getResourcesList();
     QStringList getResourcesByType(unsigned int uiType);
-
+    QWidget* createWidget(QString strDev,QString strAlias);
+    RESOURCE_TYPE parResourceName(QString strResource);
 private:
     QStringList m_listResources;
-    QList<VisaDev* > m_listRM;
+    QList<QWidget* > m_listRM;
     ViSession   m_DefaultRM;
     unsigned long m_numResources;
     const QString m_hostName = "visa://NT-G6000/?*";

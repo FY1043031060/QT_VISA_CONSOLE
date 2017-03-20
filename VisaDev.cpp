@@ -1,7 +1,7 @@
 #include "VisaDev.h"
 
-VisaDev::VisaDev(QString strDevice, ViSession viResourceRM, QObject *parent)
-    : QObject(parent),
+VisaDev::VisaDev(QString strDevice, ViSession viResourceRM, QWidget *parent)
+    : QWidget(parent),
       m_strDev(strDevice.trimmed())
 {
     ViUInt16 uiType = 0, uifNum = 0;

@@ -20,6 +20,9 @@ ResourceView::ResourceView(QWidget *parent) :
     QPushButton* pushButton = new QPushButton(this);
     pushButton->setText(QStringLiteral("DevList"));
     hlayout->addWidget(pushButton);
+    QPushButton* buttonByType = new QPushButton(this);
+    buttonByType->setText(QStringLiteral("TypeList"));
+    hlayout->addWidget(buttonByType);
 
     QObject::connect(pushButton,&QPushButton::clicked,this,[&](){
         this->m_resourceWidget->clear();
@@ -27,6 +30,15 @@ ResourceView::ResourceView(QWidget *parent) :
             this->addResourceViewItem(var);
         }
     });
+
+//    QObject::connect(buttonByType,&QPushButton::clicked,this,[&](){
+//        this->m_resourceWidget->clear();
+//        for(VisaDev::VISA_DEVICE_TYPE index = 0;index<VisaDev::VISA_DEVICE_MAX;index++){
+//            foreach (QString var, this->m_RM->getResourcesByType(index)) {
+//                this->addResourceViewItem(var);
+//            }
+
+//        }});
 }
 
 ResourceView::~ResourceView()
