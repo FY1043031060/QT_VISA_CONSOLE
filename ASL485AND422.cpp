@@ -10,3 +10,8 @@ ASL485AND422::ASL485AND422(QString strDevice, ViSession viResourceRM, QWidget *p
            VI_NULL,
            &m_session);
 }
+
+QString ASL485AND422::getDevName()
+{
+    return m_strDev;
+}

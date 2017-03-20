@@ -14,6 +14,7 @@ public:
     };
 public:
     explicit ASL485AND422(QString strDevice, ViSession viResourceRM, QWidget *parent);
+    QString getDevName();
 signals:
 
 public slots:
