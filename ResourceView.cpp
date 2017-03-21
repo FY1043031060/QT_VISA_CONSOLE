@@ -2,6 +2,7 @@
 #include "ui_ResourceView.h"
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QtDebug>
 ResourceView::ResourceView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ResourceView),
@@ -38,7 +39,8 @@ ResourceView::ResourceView(QWidget *parent) :
         for(iter;iter!= this->m_RM->getResourceDev().end();iter++)
         {
             //TODO::树形节点
-           this->addResourceViewItem(iter.key());
+           qDebug()<<__FUNCTION__<<iter.key();
+           this->addDevByCategory(iter.key());
         }
 
     });
@@ -65,7 +67,41 @@ void ResourceView::addResourceViewItem(QString strItem)
     //m_resourceWidget->topLevelItem(0)->addChild(item);
 }
 
+//TODO::树形链表有问题
 void ResourceView::addDevByCategory(QString strItem)
 {
-
+    int numTopItems = m_resourceWidget->topLevelItemCount();
+    qDebug() <<"TOP_LEVEL_ITEMS"<<numTopItems  ;
+    if(numTopItems == 0)
+    {
+        QTreeWidgetItem* pNewTreeItem =  new QTreeWidgetItem(m_resourceWidget);
+        pNewTreeItem->setText(0,strItem.split(".").first());
+        qDebug()<<"strItem."<<(strItem.split(".").first());
+        QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pNewTreeItem);
+        pChildItem->setText(0,strItem);
+        pChildItem->setCheckState(0,Qt::Unchecked);
+        pNewTreeItem->addChild(pChildItem);
+        m_resourceWidget->addTopLevelItem(pNewTreeItem);
+        return;
+    }
+    for(int index = 0; index <numTopItems;index++)
+    {
+       QTreeWidgetItem* pTreeItem = m_resourceWidget->topLevelItem(index);
+       if(strItem.contains(pTreeItem->text(0)))
+       {
+         QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pTreeItem);
+         pChildItem->setText(0,strItem);
+         pChildItem->setCheckState(0,Qt::Unchecked);
+         pTreeItem->addChild(pChildItem);
+            break;
+       }else {
+           QTreeWidgetItem* pNewTreeItem =  new QTreeWidgetItem(pTreeItem);
+           pNewTreeItem->setText(0,strItem.split(".").first());
+           m_resourceWidget->addTopLevelItem(pNewTreeItem);
+           QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pNewTreeItem);
+           pChildItem->setText(0,strItem);
+           pChildItem->setCheckState(0,Qt::Unchecked);
+           break;
+       }
+    }
 }

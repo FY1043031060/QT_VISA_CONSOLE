@@ -53,7 +53,7 @@ int ResourceManager::scanForResources()
         return status;
     m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
     //解析资源别名判断资源类型
-    RESOURCE_TYPE enType = parResourceName(strDesc);
+    RESOURCE_TYPE enType = parResourceName(aliasIfExists);
     //资源聚合
     m_mapRM.insert(showResourceDev(enType),createWidget(enType,strDesc));
 
@@ -69,7 +69,7 @@ int ResourceManager::scanForResources()
                       rsrcClass,
                       expandedUnaliasedName,
                       aliasIfExists);
-        RESOURCE_TYPE enType = parResourceName(strDesc);
+        RESOURCE_TYPE enType = parResourceName(aliasIfExists);
         m_mapRM.insert(showResourceDev(enType),createWidget(enType,strDesc));
     }
 
@@ -91,7 +91,7 @@ QStringList ResourceManager ::getResourcesByType(unsigned int uiType)
     QStringList temp;
     ViUInt16 uiDeviceType = 0;
     ViUInt16 uiDeviceInfNum = 0;
-    for each(QString var in m_listResources)
+    foreach(QString var ,m_listResources)
     {
         viParseRsrc(m_DefaultRM,
                     var.trimmed().toLatin1().data(),
@@ -105,7 +105,7 @@ QStringList ResourceManager ::getResourcesByType(unsigned int uiType)
     return temp;
 }
 
-QMap<QString, QWidget *> ResourceManager::getResourceDev()
+QMap<QString, QWidget *>& ResourceManager::getResourceDev()
 {
     return m_mapRM;
 }
@@ -125,27 +125,31 @@ ResourceManager::RESOURCE_TYPE ResourceManager::parResourceName(QString strResou
 {
     //"visa://NT-G6000/GOOD"
     QStringList strList = strResource.split("/");
-    RESOURCE_TYPE enType;
     qDebug()<<strList.last();
     QString tmpType = strList.last();
     //TODO::条件判断指定字符串指示的设备预设类型是否一致
-    if(tmpType == "")
+    if(tmpType.contains("COM"))
     {
         return ASL485_422_TYPE;
     }
     else
-        return RESOURCE_INVALID;
+        return OTHER_TYPE;
 }
 
 QString ResourceManager::showResourceDev(ResourceManager::RESOURCE_TYPE enType)
 {
-    QString tmp;
+    QString tmp= "";
     switch(enType)
     {
     case ASL485_422_TYPE:
-        tmp+=QStringLiteral("异步串口");
+        tmp = QStringLiteral(ASL485_422_DEV_NAME);
         break;
+    default:
+        tmp = QStringLiteral(OTHER_DEV_NAME);
     }
-    tmp+=(++numWidget[enType]);
+    qDebug()<<__FUNCTION__<<"1st"<<tmp;
+    if(enType< RESOURCE_MAX&& enType >=ASL485_422_TYPE)
+        tmp+=QString(".%1").arg(++numWidget[enType]);
+    qDebug()<<__FUNCTION__<<"2nd"<<tmp;
     return tmp;
 }
