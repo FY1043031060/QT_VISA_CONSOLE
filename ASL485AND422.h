@@ -15,9 +15,12 @@ public:
 public:
     explicit ASL485AND422(QString strDevice, ViSession viResourceRM, QWidget *parent);
     QString getDevName();
+    void initComponent();
+    void initConnection();
 signals:
 
 public slots:
+
 private:
     ViSession m_session;
     QString m_strDev;

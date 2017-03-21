@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QtDebug>
+#include "ASL485AND422.h"
 ResourceView::ResourceView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ResourceView),
@@ -44,8 +45,25 @@ ResourceView::ResourceView(QWidget *parent) :
         }
 
     });
-    QObject::connect(m_resourceWidget,&QTreeWidget::activated,this,[&](){
-        qDebug()<<"slots is response.";
+    QObject::connect(
+                m_resourceWidget,
+                &QTreeWidget::itemClicked,
+                this,
+                [&](QTreeWidgetItem *item, int column){
+        if(!m_RM->getResourceDev().contains(item->text(0)))
+            return;
+        QWidget* widget = m_RM->getResourceDev().value(item->text(0));
+        m_resourceWidget->setToolTip(widget->objectName());
+
+    });
+    QObject::connect(
+                m_resourceWidget,
+                &QTreeWidget::itemDoubleClicked,
+                this,[&](QTreeWidgetItem *item, int column){
+        if(!m_RM->getResourceDev().contains(item->text(0)))
+            return;
+        QWidget* widget = m_RM->getResourceDev().value(item->text(0));
+        widget->show();
     });
 }
 
@@ -70,7 +88,7 @@ void ResourceView::addResourceViewItem(QString strItem)
     //m_resourceWidget->topLevelItem(0)->addChild(item);
 }
 
-//TODO::树形链表有问题
+//DONE::树形链表有问题
 void ResourceView::addDevByCategory(QString strItem)
 {
     int numTopItems = m_resourceWidget->topLevelItemCount();
