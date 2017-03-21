@@ -19,7 +19,8 @@ public: enum RESOURCE_TYPE{
         ETHERNET_TYPE,
         AIR1553_TYPE,
         CAN_TYPE,
-        RESOURCE_MAX
+        RESOURCE_MAX,
+        RESOURCE_INVALID
     };
 public:
     explicit ResourceManager(QWidget *parent = Q_NULLPTR);
@@ -28,7 +29,7 @@ public:
     QStringList getResourcesList();
     QStringList getResourcesByType(unsigned int uiType);
     QMap<QString,QWidget*> getResourceDev();
-    QWidget* createWidget(RESOURCE_TYPE enDev,QString strAlias);
+    QWidget* createWidget(RESOURCE_TYPE enDev,QString strDesc);
     RESOURCE_TYPE parResourceName(QString strResource);
     QString showResourceDev(RESOURCE_TYPE enType);
 private:

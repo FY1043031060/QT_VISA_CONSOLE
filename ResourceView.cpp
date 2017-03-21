@@ -33,12 +33,12 @@ ResourceView::ResourceView(QWidget *parent) :
 
     QObject::connect(buttonByType,&QPushButton::clicked,this,[&](){
         this->m_resourceWidget->clear();
-        QMap<QString,ResourceManager::RESOURCE_TYPE>::iterator iter =
-                QMap<QString,ResourceManager::RESOURCE_TYPE>::begin();
-        for(iter;iter!=QMap<QString,ResourceManager::RESOURCE_TYPE>::end();iter++)
+        QMap<QString,QWidget*>::iterator iter =
+                this->m_RM->getResourceDev().begin();
+        for(iter;iter!= this->m_RM->getResourceDev().end();iter++)
         {
             //TODO::Ê÷ÐÎ½Úµã
-            //*iter.key()
+           this->addResourceViewItem(iter.key());
         }
 
     });

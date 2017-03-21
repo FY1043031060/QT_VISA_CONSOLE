@@ -30,12 +30,18 @@ int ResourceManager::scanForResources()
     ViChar rsrcClass[FILENAME_MAX];
     ViChar expandedUnaliasedName[FILENAME_MAX];
     ViChar aliasIfExists[FILENAME_MAX]; //USER DEFINE NAME
-
+    for(int index = 0;index < RESOURCE_MAX;index++){
+        numWidget[index] = 0;
+    }
+    //根据默认资源管理器获取资源描述符
     status = viFindRsrc(m_DefaultRM,
                         m_hostName.trimmed().toLatin1().data(),
                         &session,
                         &m_numResources,
                         strDesc);
+    if(status != VI_SUCCESS)
+        return status;
+    //根据默认资源管理器以及资源描述符获取设备其他信息
     status = viParseRsrcEx(m_DefaultRM,
                            strDesc,
                            &intfType,
@@ -43,16 +49,18 @@ int ResourceManager::scanForResources()
                            rsrcClass,
                            expandedUnaliasedName,
                            aliasIfExists);
-
-    //m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
+    if(status != VI_SUCCESS)
+        return status;
+    m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
+    //解析资源别名判断资源类型
     RESOURCE_TYPE enType = parResourceName(strDesc);
-
-    m_mapRM.insert(showResourceDev(enType),createWidget(enType,aliasIfExists));
+    //资源聚合
+    m_mapRM.insert(showResourceDev(enType),createWidget(enType,strDesc));
 
     for(int index = 0; index < m_numResources - 1; index++)
     {
         status = viFindNext(session, strDesc);
-        //m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
+        m_listRM.push_back(new VisaDev(strDesc, m_DefaultRM, this));
 
         viParseRsrcEx(m_DefaultRM,
                       strDesc,
@@ -61,8 +69,8 @@ int ResourceManager::scanForResources()
                       rsrcClass,
                       expandedUnaliasedName,
                       aliasIfExists);
-        //m_listRM.push_back(createWidget(strDesc,aliasIfExists));
-        m_mapRM.insert(showResourceDev(enType),createWidget(enType,aliasIfExists));
+        RESOURCE_TYPE enType = parResourceName(strDesc);
+        m_mapRM.insert(showResourceDev(enType),createWidget(enType,strDesc));
     }
 
     return status;
@@ -102,12 +110,12 @@ QMap<QString, QWidget *> ResourceManager::getResourceDev()
     return m_mapRM;
 }
 
-QWidget *ResourceManager::createWidget(RESOURCE_TYPE enDev,QString strAlias)
+QWidget *ResourceManager::createWidget(RESOURCE_TYPE enDev,QString strDesc)
 {
     switch(enDev)
     {
     case ASL485_422_TYPE:
-        return new ASL485AND422(strDev,m_DefaultRM,this);
+        return new ASL485AND422(strDesc,m_DefaultRM,this);
     default:
         return NULL;
     }
@@ -125,6 +133,8 @@ ResourceManager::RESOURCE_TYPE ResourceManager::parResourceName(QString strResou
     {
         return ASL485_422_TYPE;
     }
+    else
+        return RESOURCE_INVALID;
 }
 
 QString ResourceManager::showResourceDev(ResourceManager::RESOURCE_TYPE enType)
@@ -137,4 +147,5 @@ QString ResourceManager::showResourceDev(ResourceManager::RESOURCE_TYPE enType)
         break;
     }
     tmp+=(++numWidget[enType]);
+    return tmp;
 }
