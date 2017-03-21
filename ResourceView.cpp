@@ -31,7 +31,7 @@ ResourceView::ResourceView(QWidget *parent) :
             this->addResourceViewItem(var);
         }
     });
-
+    //设备资源按照类型排列
     QObject::connect(buttonByType,&QPushButton::clicked,this,[&](){
         this->m_resourceWidget->clear();
         QMap<QString,QWidget*>::iterator iter =
@@ -39,10 +39,13 @@ ResourceView::ResourceView(QWidget *parent) :
         for(iter;iter!= this->m_RM->getResourceDev().end();iter++)
         {
             //TODO::树形节点
-           qDebug()<<__FUNCTION__<<iter.key();
-           this->addDevByCategory(iter.key());
+            qDebug()<<__FUNCTION__<<iter.key();
+            this->addDevByCategory(iter.key());
         }
 
+    });
+    QObject::connect(m_resourceWidget,&QTreeWidget::activated,this,[&](){
+        qDebug()<<"slots is response.";
     });
 }
 
@@ -72,36 +75,25 @@ void ResourceView::addDevByCategory(QString strItem)
 {
     int numTopItems = m_resourceWidget->topLevelItemCount();
     qDebug() <<"TOP_LEVEL_ITEMS"<<numTopItems  ;
-    if(numTopItems == 0)
-    {
-        QTreeWidgetItem* pNewTreeItem =  new QTreeWidgetItem(m_resourceWidget);
-        pNewTreeItem->setText(0,strItem.split(".").first());
-        qDebug()<<"strItem."<<(strItem.split(".").first());
-        QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pNewTreeItem);
-        pChildItem->setText(0,strItem);
-        pChildItem->setCheckState(0,Qt::Unchecked);
-        pNewTreeItem->addChild(pChildItem);
-        m_resourceWidget->addTopLevelItem(pNewTreeItem);
-        return;
-    }
+
     for(int index = 0; index <numTopItems;index++)
     {
-       QTreeWidgetItem* pTreeItem = m_resourceWidget->topLevelItem(index);
-       if(strItem.contains(pTreeItem->text(0)))
-       {
-         QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pTreeItem);
-         pChildItem->setText(0,strItem);
-         pChildItem->setCheckState(0,Qt::Unchecked);
-         pTreeItem->addChild(pChildItem);
-            break;
-       }else {
-           QTreeWidgetItem* pNewTreeItem =  new QTreeWidgetItem(pTreeItem);
-           pNewTreeItem->setText(0,strItem.split(".").first());
-           m_resourceWidget->addTopLevelItem(pNewTreeItem);
-           QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pNewTreeItem);
-           pChildItem->setText(0,strItem);
-           pChildItem->setCheckState(0,Qt::Unchecked);
-           break;
-       }
+        QTreeWidgetItem* pTreeItem = m_resourceWidget->topLevelItem(index);
+        if(strItem.contains(pTreeItem->text(0)))
+        {
+            QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pTreeItem);
+            pChildItem->setText(0,strItem);
+            pChildItem->setCheckState(0,Qt::Unchecked);
+            pTreeItem->addChild(pChildItem);
+            return;
+        }
     }
+    QTreeWidgetItem* pNewTreeItem =  new QTreeWidgetItem(m_resourceWidget);
+    pNewTreeItem->setText(0,strItem.split(".").first());
+    qDebug()<<"strItem."<<(strItem.split(".").first());
+    QTreeWidgetItem* pChildItem =  new QTreeWidgetItem(pNewTreeItem);
+    pChildItem->setText(0,strItem);
+    pChildItem->setCheckState(0,Qt::Unchecked);
+    pNewTreeItem->addChild(pChildItem);
+    m_resourceWidget->addTopLevelItem(pNewTreeItem);
 }
